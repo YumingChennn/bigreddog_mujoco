@@ -1,5 +1,5 @@
 # 
-policy_path: "/home/ray/bigreddog/pre_train/robot_lab/big_reddog/0209_1201/policy.pt"
+policy_path: "/home/ray/bigreddog_mujoco/bigreddog/pre_train/robot_lab/big_reddog/0209_1201/policy.pt"
 xml_path: "xml/scene_big_reddog.xml"
 
 # Total simulation time

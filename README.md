@@ -4,10 +4,10 @@
 
 ## 環境需求
 
-- Python 3.8+
-- PyTorch >= 1.10.0
+- Python 3.10+
+- PyTorch >= 2.1.0
 - MuJoCo >= 3.2.0
-- NumPy >= 1.24.0 (< 2.0.0)
+- NumPy >= 1.24.0（< 2.0.0）
 - PyYAML >= 6.0.0
 - Matplotlib >= 3.7.0
 - Pygame >= 2.6.0
@@ -17,11 +17,11 @@
 ### 1. 建立 Conda 虛擬環境
 
 ```bash
-# 建立名為 rlmujoco 的虛擬環境
-conda create -n rlmujoco python=3.8
+# 建立名為 rlmujoco310 的虛擬環境
+conda create -n rlmujoco310 python=3.10
 
 # 啟動環境
-conda activate rlmujoco
+conda activate rlmujoco310
 ```
 
 ### 2. 安裝依賴套件
@@ -37,10 +37,10 @@ pip install -r requirements.txt
 ```bash
 # 安裝 PyTorch (根據你的 CUDA 版本選擇)
 # CPU 版本
-pip install torch>=1.10.0
+pip install torch>=2.1.0
 
 # GPU 版本 (CUDA 11.8)
-pip install torch>=1.10.0 --index-url https://download.pytorch.org/whl/cu118
+pip install torch>=2.1.0 --index-url https://download.pytorch.org/whl/cu118
 
 # 安裝其他依賴
 pip install mujoco>=3.2.0
@@ -52,34 +52,30 @@ pip install pygame>=2.6.0
 
 啟動環境後，你的終端提示符應該會顯示如下：
 ```
-(rlmujoco) ray@ray-15Z980-G-AA75C2:~/bigreddog_mujoco$
+(rlmujoco310) ray@ray-15Z980-G-AA75C2:~/bigreddog_mujoco$
 ```
 
 ## 專案結構
 
 ```
 .
-├── config/                      # 配置文件目錄
-│   ├── big_reddog_lab.yaml     # BigRedDog 機器人配置
-│   └── go2_lab.yaml            # Go2 機器人配置
-├── pre_train/                   # 預訓練模型目錄
-│   └── robot_lab/
-│       ├── big_reddog/
-│       │   └── 0209_1201/
-│       │       └── policy.pt   # BigRedDog 訓練好的策略模型
-│       └── go2/
-│           └── 0120_1655/
-│               └── policy.pt   # Go2 訓練好的策略模型
-├── xml/                         # MuJoCo XML 場景文件
-│   ├── scene_big_reddog.xml
-│   ├── scene_go2.xml
-│   ├── big_reddog_new.xml
-│   └── go2.xml
-├── urdf/                        # URDF 模型文件
-│   └── bigreddog.urdf
-├── mujoco_rl_lab_big_reddog.py # BigRedDog 主程式
-├── mujoco_rl_lab_go2.py        # Go2 主程式
-└── keyboard_controller.py       # 鍵盤控制器
+├── requirements.txt             # 依賴（repo root）
+├── bigreddog/                   # BigRedDog / Go2 主程式與資源
+│   ├── mujoco_rl_lab_big_reddog.py
+│   ├── mujoco_rl_lab_go2.py
+│   ├── keyboard_controller.py
+│   ├── config/
+│   │   ├── big_reddog_lab.yaml
+│   │   └── go2_lab.yaml
+│   ├── pre_train/
+│   ├── urdf/
+│   └── xml/
+└── bigreddog_hieghtscan/        # BigRedDog heightscan（raycaster）
+	├── mujoco_rl_him_big_reddog_heightscan.py
+	├── config/
+	│   └── big_reddog_him.yaml
+	├── pre_train/
+	└── xml/
 ```
 
 ## 使用方法
@@ -87,14 +83,31 @@ pip install pygame>=2.6.0
 ### 運行 BigRedDog 機器人模擬
 
 ```bash
+cd bigreddog
 python3 mujoco_rl_lab_big_reddog.py config/big_reddog_lab.yaml
 ```
 
 ### 運行 Go2 機器人模擬
 
 ```bash
+cd bigreddog
 python3 mujoco_rl_lab_go2.py config/go2_lab.yaml
 ```
+
+### 運行 BigRedDog heightscan（raycaster）
+
+```bash
+cd bigreddog_hieghtscan
+python3 mujoco_rl_him_big_reddog_heightscan.py config/big_reddog_him.yaml
+```
+
+在運行 heightscan 之前，請先看過並依照這個專案把 raycaster plugin 準備好（編譯/安裝）：
+https://github.com/Albusgive/mujoco_ray_caster
+
+heightscan 會在程式內呼叫：
+`mujoco.mj_loadPluginLibrary('/home/ray/mujoco/plugin/mujoco_ray_caster/lib/libsensor_raycaster.so')`
+
+請確認該 `.so` 檔案存在且路徑正確（若你的路徑不同，請修改 `bigreddog_hieghtscan/mujoco_rl_him_big_reddog_heightscan.py` 內的路徑）。
 
 ## 配置說明
 

@@ -1,7 +1,11 @@
-# Core dependencies for BigRedDog MuJoCo RL Lab
-torch>=1.10.0
+# Minimal runtime dependencies for this repo (BigRedDog + Go2 + heightscan)
+# Tested in conda env: Python 3.10.19
+
 mujoco>=3.2.0
 numpy>=1.24.0,<2.0.0
-pyyaml>=6.0.0
+PyYAML>=6.0.0
 matplotlib>=3.7.0
 pygame>=2.6.0
+
+# Policy inference
+torch>=2.1.0
